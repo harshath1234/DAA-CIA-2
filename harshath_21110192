@@ -1,0 +1,304 @@
+// Genetic Algorithm for Travelling Salesman Problem (TSP)
+
+import random
+import numpy as np
+]n_cities = 10
+cities = np.random.rand(n_cities, 2)
+pop_size = 100
+n_generations = 100
+mutation_rate = 0.1
+def create_chromosome(n_cities):
+    cities = list(range(n_cities))
+    random.shuffle(cities)
+    return cities
+
+def evaluate_fitness(chromosome, cities):
+    dist = 0
+    for i in range(len(chromosome)):
+        j = (i + 1) % len(chromosome)
+        city_i, city_j = chromosome[i], chromosome[j]
+        dist += np.linalg.norm(cities[city_i] - cities[city_j])
+    return dist
+population = [create_chromosome(n_cities) for _ in range(pop_size)]
+for generation in range(n_generations):
+    fitness = [evaluate_fitness(chromosome, cities) for chromosome in population]
+    idx = np.argsort(fitness)
+    selected_population = [population[i] for i in idx[:pop_size//2]]
+    new_population = []
+    while len(new_population) < pop_size:
+        parent1, parent2 = random.sample(selected_population, 2)
+        child = parent1.copy()
+        start, end = sorted(random.sample(range(n_cities), 2))
+        for i in range(start, end + 1):
+            if parent2[i] not in child[start:end+1]:
+                idx = child.index(parent2[i])
+                child[i], child[idx] = child[idx], child[i]
+        new_population.append(child)
+
+    for i in range(len(new_population)):
+        if random.random() < mutation_rate:
+            idx1, idx2 = random.sample
+
+
+
+
+// Cultural Algorithm for TSP
+
+import random
+import numpy as np
+
+# Define the problem
+n_cities = 10
+cities = np.random.rand(n_cities, 2)
+
+# Define the CA parameters
+n_cultures = 5
+pop_size = 20
+n_generations = 100
+mutation_rate = 0.1
+
+# Define the chromosomes
+def create_chromosome(n_cities):
+    cities = list(range(n_cities))
+    random.shuffle(cities)
+    return cities
+
+# Define the fitness function
+def evaluate_fitness(chromosome, cities):
+    dist = 0
+    for i in range(len(chromosome)):
+        j = (i + 1) % len(chromosome)
+        city_i, city_j = chromosome[i], chromosome[j]
+        dist += np.linalg.norm(cities[city_i] - cities[city_j])
+    return dist
+
+# Initialization
+populations = [[] for _ in range(n_cultures)]
+for i in range(n_cultures):
+    populations[i] = [create_chromosome(n_cities) for _ in range(pop_size)]
+
+for generation in range(n_generations):
+    # Cultural exchange
+    for i in range(n_cultures):
+        source = i
+        target = random.randint(0, n_cultures-1)
+        if target == source:
+            continue
+        best_chromosome = min(populations[source], key=lambda x: evaluate_fitness(x, cities))
+        populations[target].append(best_chromosome)
+
+    # Selection
+    new_populations = [[] for _ in range
+
+
+// Genetic Algorithm for Sine Function
+
+
+import random
+import math
+
+
+def sine_function(x, amplitude, frequency, phase):
+    return amplitude * math.sin(frequency * x + phase)
+
+def find_maximum_sine_value(lower_limit, upper_limit, population_size, num_generations, mutation_rate):
+    # Define the chromosomes
+    def create_chromosome():
+        amplitude = random.uniform(0, 1)
+        frequency = random.uniform(0, 1)
+        phase = random.uniform(0, math.pi)
+        return [amplitude, frequency, phase]
+    
+
+    def fitness(chromosome):
+        max_value = -math.inf
+        for x in range(lower_limit, upper_limit + 1):
+            y = sine_function(x, chromosome[0], chromosome[1], chromosome[2])
+            if y > max_value:
+                max_value = y
+        return max_value
+    
+    
+    population = [create_chromosome() for i in range(population_size)]
+    
+    for generation in range(num_generations):
+        # Evaluate the fitness of each chromosome
+        fitness_values = [fitness(chromosome) for chromosome in population]
+        
+     
+        def selection(fitness_values):
+            sum_fitness = sum(fitness_values)
+            probabilities = [fitness_value / sum_fitness for fitness_value in fitness_values]
+            return random.choices(population, probabilities, k=2)
+        
+        def crossover(parents):
+            offspring = [0, 0, 0]
+            for i in range(3):
+                offspring[i] = (parents[0][i] + parents[1][i]) / 2
+            return offspring
+        
+        def mutation(chromosome):
+            for i in range(3):
+                if random.random() < mutation_rate:
+                    chromosome[i] = random.uniform(0, 1) if i < 2 else random.uniform(0, math.pi)
+            return chromosome
+        
+        offspring = []
+        for i in range(population_size):
+            parents = selection(fitness_values)
+            child = crossover(parents)
+            child = mutation(child)
+            offspring.append(child)
+        
+
+        offspring_fitness_values = [fitness(chromosome) for chromosome in offspring]
+        
+
+        combined_population = population + offspring
+        combined_fitness_values = fitness_values + offspring_fitness_values
+        population = [combined_population[i] for i in random.choices(range(len(combined_population)), combined_fitness_values, k=population_size)]
+    
+
+    fitness_values = [fitness(chromosome) for chromosome in population]
+    max_fitness_index = fitness_values.index(max(fitness_values))
+    return population[max_fitness_index], max(fitness_values)
+
+lower_limit = 0
+upper_limit = 10
+population_size = 20
+num_generations = 50
+mutation_rate = 0.1
+
+best_chromosome, max_fitness_value = find_maximum_sine_value(lower_limit, upper_limit, population_size, num_generations, mutation_rate)
+
+print("Best chromosome:", best_chromosome)
+print("Maximum fitness value:", max_fitness_value)
+
+
+
+
+
+
+// Particle Swarm Optimization for the sine function
+
+import random
+import math
+
+def sine_function(x, amplitude, frequency, phase):
+    return amplitude * math.sin(frequency * x + phase)
+
+def find_extreme_sine_values(lower_limit, upper_limit, swarm_size, num_iterations, w, c1, c2):
+    
+    def create_particle():
+        amplitude = random.uniform(0, 1)
+        frequency = random.uniform(0, 1)
+        phase = random.uniform(0, math.pi)
+        velocity = [random.uniform(-1, 1) for i in range(3)]
+        return [amplitude, frequency, phase, velocity, amplitude, frequency, phase]
+    
+    def fitness(chromosome):
+        max_value = -math.inf
+        min_value = math.inf
+        for x in range(lower_limit, upper_limit + 1):
+            y = sine_function(x, chromosome[0], chromosome[1], chromosome[2])
+            if y > max_value:
+                max_value = y
+                chromosome[4] = max_value
+                chromosome[5] = chromosome[0]
+                chromosome[6] = chromosome[1]
+            if y < min_value:
+                min_value = y
+                chromosome[7] = min_value
+                chromosome[8] = chromosome[0]
+                chromosome[9] = chromosome[1]
+        return max_value - min_value
+    
+    swarm = [create_particle() for i in range(swarm_size)]   
+    global_best_particle = [0, 0, 0, [0, 0, 0], -math.inf, 0, 0, math.inf, 0, 0]
+    for iteration in range(num_iterations):
+        # Evaluate the fitness of each particle
+        for particle in swarm:
+            particle_fitness = fitness(particle)
+            # Update the personal best for each particle
+            if particle_fitness > particle[4] - particle[7]:
+                particle[4] = particle_fitness + particle[7]
+                particle[5] = particle[0]
+                particle[6] = particle[1]
+            if particle_fitness > global_best_particle[4] - global_best_particle[7]:
+                global_best_particle = list(particle)
+        for particle in swarm:
+            for i in range(3):
+                particle[3][i] = w * particle[3][i] + c1 * random.uniform(0, 1) * (particle[5+i] - particle[i]) + c2 * random.uniform(0, 1) * (global_best_particle[5+i] - particle[i])
+                particle[i] += particle[3][i]
+                # Ensure the values are within bounds
+                if i < 2:
+                    particle[i] = max(0, min(1, particle[i]))
+                else:
+                    particle[i] = max(0, min(math.pi, particle[i]))
+        
+    return (global_best_particle[5:8], global_best_particle[8:])
+    
+    
+    
+
+// Ant Colony Optimization for finding the shortest path in a graph.
+
+import random
+import numpy as np
+class Graph:
+    def __init__(self, num_nodes):
+        self.num_nodes = num_nodes
+        self.edges = np.zeros((num_nodes, num_nodes))
+    
+    def add_edge(self, i, j, distance):
+        self.edges[i][j] = distance
+        self.edges[j][i] = distance
+class Ant:
+    def __init__(self, start_node):
+        self.start_node = start_node
+        self.path = [start_node]
+        self.visited_nodes = set([start_node])
+        self.distance_travelled = 0
+    
+    def move_to_next_node(self, probabilities):
+        next_node = random.choices(range(len(probabilities)), probabilities)[0]
+        self.path.append(next_node)
+        self.visited_nodes.add(next_node)
+        self.distance_travelled += graph.edges[self.path[-2]][next_node]
+    
+    def can_move_to_node(self, node):
+        return node not in self.visited_nodes
+
+def find_shortest_path_in_graph(graph, num_ants, evaporation_rate, alpha, beta, num_iterations):
+    pheromone_trails = np.ones((graph.num_nodes, graph.num_nodes))
+    np.fill_diagonal(pheromone_trails, 0)
+    
+    for iteration in range(num_iterations):
+        # Generate ants and let them move through the graph
+        ants = [Ant(i) for i in range(graph.num_nodes)]
+        for ant in ants:
+            for i in range(graph.num_nodes - 1):
+                current_node = ant.path[-1]
+                unvisited_nodes = [node for node in range(graph.num_nodes) if ant.can_move_to_node(node)]
+                if not unvisited_nodes:
+                    break
+                pheromone_values = np.power(pheromone_trails[current_node][unvisited_nodes], alpha)
+                distance_values = np.power(1 / graph.edges[current_node][unvisited_nodes], beta)
+                probabilities = pheromone_values * distance_values / np.sum(pheromone_values * distance_values)
+                ant.move_to_next_node(probabilities)
+            ant.distance_travelled += graph.edges[ant.path[-1]][ant.start_node]
+        
+        pheromone_trails *= (1 - evaporation_rate)
+        for ant in ants:
+            for i in range(graph.num_nodes - 1):
+                pheromone_trails[ant.path[i]][ant.path[i+1]] += 1 / ant.distance_travelled
+            pheromone_trails[ant.path[-1]][ant.start_node] += 1 / ant.distance_travelled
+    shortest_path = None
+    shortest_distance = np.inf
+    for ant in ants:
+        if ant.distance_travelled < shortest_distance:
+            shortest_path = ant.path
+            shortest_distance = ant.distance_travelled
+    
+    return shortest_path, shortest_distance
+
